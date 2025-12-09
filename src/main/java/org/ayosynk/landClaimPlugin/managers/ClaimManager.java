@@ -18,6 +18,8 @@ public class ClaimManager {
     private final ConfigManager configManager;
     private final Map<ChunkPosition, UUID> claimedChunks = new HashMap<>();
     private final Map<UUID, Set<ChunkPosition>> playerClaims = new HashMap<>();
+    private final Map<ChunkPosition, ChunkSettings> chunkSettings = new HashMap<>();
+
 
     public ClaimManager(LandClaimPlugin plugin, ConfigManager configManager) {
         this.plugin = plugin;
@@ -70,6 +72,14 @@ public class ClaimManager {
                 }
             }
         }
+    }
+
+    public ChunkSettings getChunkSettings(ChunkPosition pos) {
+    return chunkSettings.computeIfAbsent(pos, k -> new ChunkSettings());
+    }
+
+    private void saveData() {
+    saveClaims();
     }
 
     public void saveClaims() {

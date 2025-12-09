@@ -185,7 +185,7 @@ public class CommandHandler implements CommandExecutor {
 
         if (args.length < 2) {
             // Show current status
-            boolean enabled = claimManager.isMobDamageEnabled(pos);
+            boolean enabled = claimManager.isMobDamageAllowed(pos);
             sendMessage(player, "mobdamage-status", "{status}", enabled ? "enabled" : "disabled");
             return;
         }
@@ -447,7 +447,7 @@ public class CommandHandler implements CommandExecutor {
         player.sendMessage(configManager.getMessage("claim-info-pvp", 
             "{status}", settings.isPvpEnabled() ? "enabled" : "disabled"));
         player.sendMessage(configManager.getMessage("claim-info-mobdamage", 
-            "{status}", settings.isMobDamageEnabled() ? "enabled" : "disabled"));
+            "{status}", settings.isMobDamageAllowed() ? "enabled" : "disabled"));
 
         Set<UUID> trusted = trustManager.getTrustedPlayers(ownerId);
         if (!trusted.isEmpty()) {

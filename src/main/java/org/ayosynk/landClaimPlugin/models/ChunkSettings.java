@@ -25,7 +25,7 @@ public class ChunkSettings {
         this.pvpEnabled = pvpEnabled;
     }
 
-
+    // 
 
     public boolean isMobDamageAllowed() {
         return mobDamageEnabled;
@@ -35,7 +35,7 @@ public class ChunkSettings {
         this.mobDamageEnabled = mobDamageEnabled;
     }
 
- 
+
 
     public boolean isMobDamageEnabled() {
         return isMobDamageAllowed();
@@ -44,6 +44,8 @@ public class ChunkSettings {
     public void setMobDamageEnabled(boolean enabled) {
         setMobDamageAllowed(enabled);
     }
+
+
 
     @Override
     public String toString() {

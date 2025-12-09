@@ -1,13 +1,13 @@
 name: LandClaimPlugin
-version: '1.5'
+version: '1.5.Infinity'
 main: org.ayosynk.landClaimPlugin.LandClaimPlugin
 api-version: '1.21'
-author: AyoSynk
-soft-depend: WorldGuard`
+author: AyoSynk && Mohio
+soft-depend: WorldGuard
 commands:
   claim:
     description: Main land claim command
-    usage: /claim [auto|trust <player>|untrust <player>|unstuck|visible [always|off]|help|reload|admin|trustlist|info]
+    usage: /claim [auto|trust <player>|untrust <player>|unstuck|visible [always|off]|help|reload|admin|trustlist|info|pvp <on|off>|mobdamage <on|off>]
   unclaim:
     description: Unclaim land chunks
     usage: /unclaim [auto|all [confirm]]

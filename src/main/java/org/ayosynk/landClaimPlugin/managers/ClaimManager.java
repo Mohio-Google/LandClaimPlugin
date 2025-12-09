@@ -261,7 +261,7 @@ public void setChunkPvP(ChunkPosition pos, boolean enabled) {
     }
 }
 
-public boolean isMobDamageEnabled(ChunkPosition pos) {
+public boolean isMobDamageAllowed(ChunkPosition pos) {
     ChunkSettings settings = getChunkSettings(pos);
     return settings != null && settings.isMobDamageAllowed();
 }

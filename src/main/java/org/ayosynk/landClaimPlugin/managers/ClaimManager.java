@@ -234,4 +234,32 @@ public class ClaimManager {
         }
         return configManager.getConfig().getInt("chunk-claim-limit", 5);
     }
+    // ------------------ ADDED SETTINGS METHODS ------------------
+
+public boolean isPvpEnabled(ChunkPosition pos) {
+    ChunkSettings settings = getChunkSettings(pos);
+    return settings != null && settings.isPvpEnabled();
+}
+
+public void setChunkPvP(ChunkPosition pos, boolean enabled) {
+    ChunkSettings settings = getChunkSettings(pos);
+    if (settings != null) {
+        settings.setPvpEnabled(enabled);
+        saveData();
+    }
+}
+
+public boolean isMobDamageEnabled(ChunkPosition pos) {
+    ChunkSettings settings = getChunkSettings(pos);
+    return settings != null && settings.isMobDamageAllowed();
+}
+
+public void setChunkMobDamage(ChunkPosition pos, boolean enabled) {
+    ChunkSettings settings = getChunkSettings(pos);
+    if (settings != null) {
+        settings.setMobDamageAllowed(enabled);
+        saveData();
+    }
+}
+
 }

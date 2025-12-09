@@ -8,6 +8,8 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.ayosynk.landClaimPlugin.models.ChunkSettings;
+
 
 import java.util.*;
 

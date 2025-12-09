@@ -12,6 +12,7 @@ import org.ayosynk.landClaimPlugin.managers.VisualizationManager;
 import org.ayosynk.landClaimPlugin.managers.VisualizationManager.VisualizationMode;
 import org.ayosynk.landClaimPlugin.managers.ClaimManager;
 import org.ayosynk.landClaimPlugin.models.ChunkPosition;
+import org.ayosynk.landClaimPlugin.models.ChunkSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -44,7 +45,7 @@ public class CommandHandler implements CommandExecutor {
         this.configManager = configManager;
         this.visualizationManager = visualizationManager;
 
-        // Safe command registration
+        
         if (plugin.getCommand("claim") != null) {
             plugin.getCommand("claim").setExecutor(this);
         }
@@ -119,9 +120,89 @@ public class CommandHandler implements CommandExecutor {
                 case "member":
                     handleMemberCommand(player, args);
                     break;
+                case "pvp":
+                    handlePvpCommand(player, args);
+                    break;
+                case "mobdamage":
+                    handleMobDamageCommand(player, args);
+                    break;
                 default:
                     sendMessage(player, "invalid-command");
             }
+        }
+    }
+
+    private void handlePvpCommand(Player player, String[] args) {
+        ChunkPosition pos = new ChunkPosition(player.getLocation());
+        
+        if (!claimManager.isChunkClaimed(pos)) {
+            sendMessage(player, "claim-info-not-claimed");
+            return;
+        }
+
+        UUID owner = claimManager.getChunkOwner(pos);
+        if (!player.getUniqueId().equals(owner)) {
+            sendMessage(player, "not-owner");
+            return;
+        }
+
+        if (args.length < 2) {
+            // Show current status
+            boolean enabled = claimManager.isPvpEnabled(pos);
+            sendMessage(player, "pvp-status", "{status}", enabled ? "enabled" : "disabled");
+            return;
+        }
+
+        switch (args[1].toLowerCase()) {
+            case "on":
+            case "enable":
+                claimManager.setChunkPvP(pos, true);
+                sendMessage(player, "pvp-enabled");
+                break;
+            case "off":
+            case "disable":
+                claimManager.setChunkPvP(pos, false);
+                sendMessage(player, "pvp-disabled");
+                break;
+            default:
+                sendMessage(player, "pvp-usage");
+        }
+    }
+
+    private void handleMobDamageCommand(Player player, String[] args) {
+        ChunkPosition pos = new ChunkPosition(player.getLocation());
+        
+        if (!claimManager.isChunkClaimed(pos)) {
+            sendMessage(player, "claim-info-not-claimed");
+            return;
+        }
+
+        UUID owner = claimManager.getChunkOwner(pos);
+        if (!player.getUniqueId().equals(owner)) {
+            sendMessage(player, "not-owner");
+            return;
+        }
+
+        if (args.length < 2) {
+            // Show current status
+            boolean enabled = claimManager.isMobDamageEnabled(pos);
+            sendMessage(player, "mobdamage-status", "{status}", enabled ? "enabled" : "disabled");
+            return;
+        }
+
+        switch (args[1].toLowerCase()) {
+            case "on":
+            case "enable":
+                claimManager.setChunkMobDamage(pos, true);
+                sendMessage(player, "mobdamage-enabled");
+                break;
+            case "off":
+            case "disable":
+                claimManager.setChunkMobDamage(pos, false);
+                sendMessage(player, "mobdamage-disabled");
+                break;
+            default:
+                sendMessage(player, "mobdamage-usage");
         }
     }
 
@@ -209,7 +290,7 @@ public class CommandHandler implements CommandExecutor {
 
     private Location findNearestUnclaimed(Location origin) {
         World world = origin.getWorld();
-        int startX = origin.getBlockX() >> 4; // Convert to chunk coordinates
+        int startX = origin.getBlockX() >> 4;
         int startZ = origin.getBlockZ() >> 4;
 
         for (int radius = 1; radius <= 50; radius++) {
@@ -331,7 +412,6 @@ public class CommandHandler implements CommandExecutor {
         for (UUID id : trusted) {
             String name = Bukkit.getOfflinePlayer(id).getName();
             if (name != null) {
-                // Create clickable trust entry
                 player.spigot().sendMessage(ChatMessageType.CHAT,
                         TextComponent.fromLegacyText(configManager.getMessage(
                                 "trust-list-item", "{player}", name
@@ -361,6 +441,13 @@ public class CommandHandler implements CommandExecutor {
         if (ownerName == null) ownerName = "Unknown";
 
         sendMessage(player, "claim-info-owner", "{owner}", ownerName);
+
+        // Show chunk-specific settings
+        ChunkSettings settings = claimManager.getChunkSettings(pos);
+        player.sendMessage(configManager.getMessage("claim-info-pvp", 
+            "{status}", settings.isPvpEnabled() ? "enabled" : "disabled"));
+        player.sendMessage(configManager.getMessage("claim-info-mobdamage", 
+            "{status}", settings.isMobDamageEnabled() ? "enabled" : "disabled"));
 
         Set<UUID> trusted = trustManager.getTrustedPlayers(ownerId);
         if (!trusted.isEmpty()) {
@@ -532,6 +619,8 @@ public class CommandHandler implements CommandExecutor {
                 "help-visible",
                 "help-trustlist",
                 "help-info",
+                "help-pvp",
+                "help-mobdamage",
                 "help-admin",
                 "help-unclaimall",
                 "help-trust-menu",

@@ -25,16 +25,6 @@ public class ChunkSettings {
         this.pvpEnabled = pvpEnabled;
     }
 
-    // 
-
-    public boolean isMobDamageAllowed() {
-        return mobDamageEnabled;
-    }
-
-    public void setMobDamageAllowed(boolean mobDamageEnabled) {
-        this.mobDamageEnabled = mobDamageEnabled;
-    }
-
 
 
     public boolean isMobDamageEnabled() {

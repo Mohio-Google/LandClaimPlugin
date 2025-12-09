@@ -26,12 +26,11 @@ public class ClaimTabCompleter implements TabCompleter {
                 completions.addAll(Arrays.asList(
                         "auto", "trust", "untrust", "unstuck",
                         "visible", "help", "reload", "admin", "trustlist", "info",
-                        "trust", "visitor", "member"
+                        "trust", "visitor", "member", "pvp", "mobdamage"
                 ));
             } else if (args.length == 2) {
                 if (args[0].equalsIgnoreCase("trust") ||
                         args[0].equalsIgnoreCase("untrust")) {
-                    // Return null to let Bukkit handle online player suggestions
                     return null;
                 } else if (args[0].equalsIgnoreCase("visible")) {
                     completions.addAll(Arrays.asList("always", "off"));
@@ -43,12 +42,16 @@ public class ClaimTabCompleter implements TabCompleter {
                     completions.add("menu");
                 } else if (args[0].equalsIgnoreCase("member")) {
                     completions.addAll(Arrays.asList("add", "remove"));
+                } else if (args[0].equalsIgnoreCase("pvp")) {
+                    completions.addAll(Arrays.asList("on", "off", "enable", "disable"));
+                } else if (args[0].equalsIgnoreCase("mobdamage")) {
+                    completions.addAll(Arrays.asList("on", "off", "enable", "disable"));
                 }
             } else if (args.length == 3) {
                 if (args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("unclaimall")) {
-                    return null; // Player suggestions for unclaimall
+                    return null;
                 } else if (args[0].equalsIgnoreCase("member")) {
-                    return null; // Player suggestions for member add/remove
+                    return null;
                 }
             }
         } else if (cmd.equals("unclaim")) {
@@ -63,7 +66,6 @@ public class ClaimTabCompleter implements TabCompleter {
             }
         }
 
-        // Filter based on current input
         return completions.stream()
                 .filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
                 .collect(Collectors.toList());

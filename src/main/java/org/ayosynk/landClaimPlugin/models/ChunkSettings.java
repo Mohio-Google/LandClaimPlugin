@@ -5,8 +5,8 @@ public class ChunkSettings {
     private boolean mobDamageEnabled;
 
     public ChunkSettings() {
-        this.pvpEnabled = false; 
-        this.mobDamageEnabled = false; 
+        this.pvpEnabled = false;
+        this.mobDamageEnabled = false;
     }
 
     public ChunkSettings(boolean pvpEnabled, boolean mobDamageEnabled) {
@@ -22,11 +22,12 @@ public class ChunkSettings {
         this.pvpEnabled = pvpEnabled;
     }
 
-    public boolean isMobDamageEnabled() {
+
+    public boolean isMobDamageAllowed() {
         return mobDamageEnabled;
     }
 
-    public void setMobDamageEnabled(boolean mobDamageEnabled) {
+    public void setMobDamageAllowed(boolean mobDamageEnabled) {
         this.mobDamageEnabled = mobDamageEnabled;
     }
 
